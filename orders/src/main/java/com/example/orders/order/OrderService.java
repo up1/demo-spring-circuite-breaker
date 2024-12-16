@@ -19,6 +19,7 @@ public class OrderService {
 
     @CircuitBreaker(name = GET_SERVICE_NAME, fallbackMethod = "getDefaultOrders")
     public Order getOrderById(Integer id) {
+        // Call external service via HTTP protocol
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Item> entity = new HttpEntity<>(null, headers);
@@ -27,6 +28,8 @@ public class OrderService {
                 HttpMethod.GET, entity,
                 Item.class);
         Item item = response.getBody();
+
+        // Get order detail from database
         Order order = null;
         if (item != null) {
             System.out.println("Item exists");
